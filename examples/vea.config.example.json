@@ -1,0 +1,54 @@
+{
+  "$schema": "../schemas/vea-config.schema.json",
+  "configVersion": 1,
+  "ui": {
+    "theme": "system",
+    "density": "comfortable",
+    "confirmProviderSubmission": true
+  },
+  "scheduler": {
+    "globalMaxRuns": 4,
+    "perProjectMaxRuns": 2,
+    "defaultProviderMaxRuns": 2,
+    "fairness": "weighted-deficit-round-robin",
+    "projectWeights": {},
+    "unknownWriteScopeConflicts": true
+  },
+  "accounts": [
+    {
+      "id": "example-api-account",
+      "adapter": "provider-api",
+      "auth": { "type": "apiKey", "credentialRef": "cred_from_os_keychain" },
+      "enabled": false,
+      "allowedProjects": ["*"],
+      "maxConcurrentRuns": 2
+    }
+  ],
+  "models": {
+    "balanced-coder": {
+      "account": "example-api-account",
+      "model": "provider-model-id",
+      "efforts": { "low": "low", "medium": "medium", "high": "high" },
+      "tags": ["code", "tools"]
+    }
+  },
+  "routing": {
+    "defaultPolicy": "balanced",
+    "allowCrossProviderFallback": false,
+    "preferSubscription": true,
+    "maxEstimatedCostUsdPerTask": 5
+  },
+  "security": {
+    "trustedProjects": [],
+    "diagnosticContentLogging": false,
+    "auditRetentionDays": 90
+  },
+  "skills": {
+    "enabled": true,
+    "userRoots": ["~/.agents/skills"],
+    "maxFilesPerSkill": 100,
+    "maxBytesPerSkill": 1048576
+  },
+  "mcp": { "enabled": false, "servers": [] },
+  "plugins": { "enabled": false, "packages": [] }
+}

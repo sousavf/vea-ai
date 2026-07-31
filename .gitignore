@@ -1,0 +1,15 @@
+node_modules/
+dist/
+target/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+coverage/
+.vite/
+.pi-subagents/
+*.db
+*.db-shm
+*.db-wal
+apps/desktop/src-tauri/gen/

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vea.dev/schemas/task-graph-v1.json",
+  "title": "Vea task graph",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "projectId", "version", "title", "baseRevision", "nodes"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "projectId": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "baseRevision": { "type": "string", "minLength": 1 },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "projectId",
+          "graphId",
+          "title",
+          "instructions",
+          "kind",
+          "role",
+          "effort",
+          "status",
+          "priority",
+          "dependsOn",
+          "readScopes",
+          "writeScopes",
+          "requiredCapabilities",
+          "budget"
+        ],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "projectId": { "type": "string", "minLength": 1 },
+          "graphId": { "type": "string", "minLength": 1 },
+          "title": { "type": "string", "minLength": 1 },
+          "instructions": { "type": "string" },
+          "kind": { "enum": ["agent", "approval", "integration", "validation"] },
+          "role": { "enum": ["plan", "implement", "review", "research", "validate"] },
+          "effort": { "enum": ["off", "low", "medium", "high", "max"] },
+          "status": {
+            "enum": [
+              "draft",
+              "waiting",
+              "ready",
+              "queued",
+              "running",
+              "succeeded",
+              "failed",
+              "cancelled",
+              "blocked"
+            ]
+          },
+          "priority": { "type": "integer" },
+          "dependsOn": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+          "readScopes": { "type": "array", "items": { "type": "string" } },
+          "writeScopes": { "type": "array", "items": { "type": "string" } },
+          "requiredCapabilities": { "type": "array", "items": { "type": "string" } },
+          "budget": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["maxTurns", "maxMinutes"],
+            "properties": {
+              "maxTurns": { "type": "integer", "minimum": 1 },
+              "maxMinutes": { "type": "integer", "minimum": 1 },
+              "maxEstimatedCostUsd": { "type": "number", "minimum": 0 }
+            }
+          },
+          "readyAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

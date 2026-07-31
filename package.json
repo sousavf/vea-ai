@@ -1,0 +1,29 @@
+{
+  "name": "vea",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local-first control plane for multi-provider coding agents",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@11.18.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @vea/desktop dev",
+    "dev:web": "pnpm --filter @vea/desktop dev:web",
+    "build": "pnpm -r --if-present build",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "audit:capabilities": "node scripts/audit-tauri-capabilities.mjs",
+    "check": "pnpm audit:capabilities && pnpm typecheck && pnpm test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "prettier": "^3.9.0",
+    "typescript": "^7.0.0",
+    "vitest": "^4.1.0"
+  }
+}

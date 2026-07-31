@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  "@tauri-apps/cli": true
+  esbuild: true
+
+minimumReleaseAgeExclude:
+  - vite@8.2.0

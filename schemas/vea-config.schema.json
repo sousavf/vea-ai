@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vea.dev/schemas/vea-config-v1.json",
+  "title": "Vea user configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "configVersion",
+    "ui",
+    "scheduler",
+    "accounts",
+    "models",
+    "routing",
+    "security",
+    "skills",
+    "mcp",
+    "plugins"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "configVersion": { "const": 1 },
+    "ui": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "theme": { "enum": ["system", "light", "dark"] },
+        "density": { "enum": ["comfortable", "compact"] },
+        "confirmProviderSubmission": { "type": "boolean" }
+      }
+    },
+    "scheduler": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "globalMaxRuns": { "type": "integer", "minimum": 1, "maximum": 64 },
+        "perProjectMaxRuns": { "type": "integer", "minimum": 1, "maximum": 16 },
+        "defaultProviderMaxRuns": { "type": "integer", "minimum": 1, "maximum": 32 },
+        "fairness": { "const": "weighted-deficit-round-robin" },
+        "projectWeights": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0.1, "maximum": 100 }
+        },
+        "unknownWriteScopeConflicts": { "type": "boolean" }
+      }
+    },
+    "accounts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "adapter", "auth", "enabled", "allowedProjects"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "adapter": { "type": "string", "minLength": 1 },
+          "auth": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["type", "credentialRef"],
+                "properties": {
+                  "type": { "const": "apiKey" },
+                  "credentialRef": { "type": "string", "minLength": 1 }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["type", "credentialRef"],
+                "properties": {
+                  "type": { "const": "oauth" },
+                  "credentialRef": { "type": "string", "minLength": 1 }
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["type"],
+                "properties": { "type": { "const": "cliSession" } }
+              }
+            ]
+          },
+          "enabled": { "type": "boolean" },
+          "allowedProjects": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "maxConcurrentRuns": { "type": "integer", "minimum": 1, "maximum": 32 }
+        }
+      }
+    },
+    "models": { "type": "object", "additionalProperties": { "$ref": "#/$defs/modelAlias" } },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "defaultPolicy": { "type": "string", "minLength": 1 },
+        "allowCrossProviderFallback": { "type": "boolean" },
+        "preferSubscription": { "type": "boolean" },
+        "maxEstimatedCostUsdPerTask": { "type": "number", "minimum": 0 }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trustedProjects": { "type": "array", "items": { "type": "string" } },
+        "diagnosticContentLogging": { "const": false },
+        "auditRetentionDays": { "type": "integer", "minimum": 1, "maximum": 3650 }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "userRoots": { "type": "array", "items": { "type": "string" } },
+        "maxFilesPerSkill": { "type": "integer", "minimum": 1, "maximum": 1000 },
+        "maxBytesPerSkill": { "type": "integer", "minimum": 1024, "maximum": 10485760 }
+      }
+    },
+    "mcp": { "$ref": "#/$defs/disabledExecutablePlane" },
+    "plugins": { "$ref": "#/$defs/disabledPluginPlane" }
+  },
+  "$defs": {
+    "modelAlias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["account", "model"],
+      "properties": {
+        "account": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "efforts": {
+          "type": "object",
+          "propertyNames": { "enum": ["off", "low", "medium", "high", "max"] },
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "disabledExecutablePlane": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "servers": { "type": "array", "maxItems": 0 }
+      }
+    },
+    "disabledPluginPlane": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "packages": { "type": "array", "maxItems": 0 }
+      }
+    }
+  }
+}

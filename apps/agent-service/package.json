@@ -1,0 +1,23 @@
+{
+  "name": "@vea/agent-service",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@vea/domain": "workspace:*",
+    "@vea/protocol": "workspace:*",
+    "@vea/routing": "workspace:*",
+    "@vea/scheduler": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsx": "^4.20.6",
+    "typescript": "^7.0.0",
+    "vitest": "^4.1.0"
+  }
+}
