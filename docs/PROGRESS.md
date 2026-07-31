@@ -4,7 +4,7 @@ Updated: 2026-07-31
 
 ## Completed locally
 
-- Initialized an uncommitted Git repository on `main` with no remote.
+- Initialized Git on `main` and published the public repository at `https://github.com/sousavf/vea-ai`.
 - Chosen architecture: Tauri v2 desktop, React/TypeScript UI, Rust privilege host, TypeScript agent service.
 - Chosen license: MIT.
 - Added architecture, roadmap, threat model, provider gate, extension compatibility, and contribution docs.
@@ -24,7 +24,7 @@ Updated: 2026-07-31
 - Rust format, Clippy with warnings denied, and tests: passing.
 - Tauri native no-bundle build: validated locally on macOS during review.
 - JSON files and Prettier formatting: passing.
-- No staged files, commits, remotes, pushes, or GitHub repository exist.
+- Initial M0 commit is pushed to `origin/main`; the working tree is clean.
 
 ## Not implemented
 
@@ -37,6 +37,6 @@ Updated: 2026-07-31
 - Executable Agent Skills scripts, MCP servers, plugins, or privileged Pi packages.
 - Merge, push, remote control, team sync, or hosted control plane.
 
-## Publication gate
+## Publication status
 
-Local step 3 is complete and the final review found no blocker in the scoped M0 scaffold. Step 4—commit, GitHub repository/project creation, push, or any publication—must not run without explicit user approval.
+Local step 3 is complete and the final review found no blocker in the scoped M0 scaffold. The user approved step 4; the initial foundation is committed and pushed to the public GitHub repository.
