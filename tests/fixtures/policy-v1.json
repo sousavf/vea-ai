@@ -1,0 +1,74 @@
+{
+  "schema": "vea.policy-vector.v1",
+  "action": {
+    "schema_version": 1,
+    "action_id": "action-1",
+    "run_id": "run-1",
+    "project_id": "project-1",
+    "requested_capability": {
+      "kind": "project_paths",
+      "capability": "apply_patch",
+      "project_id": "project-1",
+      "run_id": "run-1",
+      "worktree_id": "worktree-1",
+      "paths": [
+        "src/policy.rs"
+      ]
+    },
+    "operation": {
+      "kind": "apply_patch",
+      "worktree_id": "worktree-1",
+      "patch_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "patch_bytes": 128,
+      "affected_paths": [
+        "src/policy.rs"
+      ]
+    },
+    "provenance": [
+      {
+        "source_kind": "user_prompt",
+        "source_id": "message-1",
+        "content_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "created_at_unix_ms": 1000,
+    "expires_at_unix_ms": 301000
+  },
+  "canonicalAction": "{\"action_id\":\"action-1\",\"created_at_unix_ms\":1000,\"expires_at_unix_ms\":301000,\"operation\":{\"affected_paths\":[\"src/policy.rs\"],\"kind\":\"apply_patch\",\"patch_bytes\":128,\"patch_digest\":\"sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"worktree_id\":\"worktree-1\"},\"project_id\":\"project-1\",\"provenance\":[{\"content_digest\":\"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"source_id\":\"message-1\",\"source_kind\":\"user_prompt\"}],\"requested_capability\":{\"capability\":\"apply_patch\",\"kind\":\"project_paths\",\"paths\":[\"src/policy.rs\"],\"project_id\":\"project-1\",\"run_id\":\"run-1\",\"worktree_id\":\"worktree-1\"},\"run_id\":\"run-1\",\"schema_version\":1}",
+  "actionDigest": "sha256:8ba1583b8ebd0ddd32d85aaf83c27e5b28528d9224a258b9936671de29077156",
+  "policy": {
+    "schema_version": 1,
+    "revision": "revision-1",
+    "trusted_projects": {
+      "project-1": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "grants": [
+      {
+        "kind": "project_paths",
+        "capability": "apply_patch",
+        "project_id": "project-1",
+        "run_id": "run-1",
+        "worktree_id": "worktree-1",
+        "paths": [
+          "src/policy.rs"
+        ]
+      }
+    ],
+    "rules": {
+      "project_apply_patch": {
+        "decision": "require_approval",
+        "max_ttl_ms": 60000
+      }
+    },
+    "max_approval_ttl_ms": 60000
+  },
+  "canonicalPolicy": "{\"grants\":[{\"capability\":\"apply_patch\",\"kind\":\"project_paths\",\"paths\":[\"src/policy.rs\"],\"project_id\":\"project-1\",\"run_id\":\"run-1\",\"worktree_id\":\"worktree-1\"}],\"max_approval_ttl_ms\":60000,\"revision\":\"revision-1\",\"rules\":{\"project_apply_patch\":{\"decision\":\"require_approval\",\"max_ttl_ms\":60000}},\"schema_version\":1,\"trusted_projects\":{\"project-1\":\"sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\"}}",
+  "policyDigest": "sha256:a449ca35559eeca50da4ecdd7577d9404715cd951de586d37aec487bb2b6a7ad",
+  "executionState": {
+    "project_state": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "resource_state": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "destination_state": null
+  },
+  "canonicalBinding": "{\"action_digest\":\"sha256:8ba1583b8ebd0ddd32d85aaf83c27e5b28528d9224a258b9936671de29077156\",\"destination_state\":null,\"policy_digest\":\"sha256:a449ca35559eeca50da4ecdd7577d9404715cd951de586d37aec487bb2b6a7ad\",\"project_state\":\"sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"resource_state\":\"sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\"}",
+  "bindingDigest": "sha256:dba06660adbada802038e140de7fce21a74372de7af968a283284da1922f1244"
+}

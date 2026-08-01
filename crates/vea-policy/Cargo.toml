@@ -1,0 +1,15 @@
+[package]
+name = "vea-policy"
+version = "0.1.0"
+description = "Canonical action and approval policy primitives for Vea"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+hex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true

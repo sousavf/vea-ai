@@ -15,6 +15,7 @@ Updated: 2026-07-31
 - Added task-aware routing with effort normalization, task/policy budgets, quota freshness, and inspectable decisions.
 - Restricted the Tauri renderer capability list to no core permissions; only the registered app metadata command is currently callable.
 - Added cross-platform CI definitions and supply-chain lockfiles.
+- Added the Rust `vea-policy` authorization core with independent capability grants, typed policy rules, bounded canonical actions, action/policy/state digests, short-lived approvals, and shared Rust/TypeScript golden vectors.
 
 ## Validation
 
@@ -29,7 +30,7 @@ Updated: 2026-07-31
 ## Not implemented
 
 - SQLite event store and migrations.
-- Canonical action digests, approvals, and audit persistence.
+- Host/UI/store wiring for canonical actions and approvals, plus audit persistence.
 - OS keychain/OAuth broker.
 - Secure filesystem/Git/worktree/process brokers.
 - Sidecar packaging and supervision from Rust.

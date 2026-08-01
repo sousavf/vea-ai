@@ -8,7 +8,7 @@ The implementation sequence is security-first. Extension breadth never weakens t
 - [x] Tauri v2 + React desktop shell
 - [x] Versioned TypeScript domain, configuration, protocol, scheduler, router, and extension-plane contracts
 - [x] Sidecar handshake foundation and tests
-- [ ] Rust-host action/capability schemas and canonical digest
+- [x] Rust-host action/capability schemas and canonical digest
 - [ ] Target-specific sidecar packaging spike
 - [ ] SQLite event store migration 0001
 
