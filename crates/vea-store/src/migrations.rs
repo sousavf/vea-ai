@@ -329,11 +329,11 @@ fn unix_ms() -> Result<u64, StoreError> {
     u64::try_from(duration.as_millis()).map_err(|_| StoreError::InvalidInput("system clock"))
 }
 
-pub(crate) fn set_user_only_permissions(path: &Path) -> Result<(), StoreError> {
+pub(crate) fn set_user_only_permissions(_path: &Path) -> Result<(), StoreError> {
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
-        fs::set_permissions(path, fs::Permissions::from_mode(0o600))?;
+        fs::set_permissions(_path, fs::Permissions::from_mode(0o600))?;
     }
     Ok(())
 }
@@ -373,9 +373,9 @@ fn create_private_file(path: &Path) -> Result<(), StoreError> {
     Ok(())
 }
 
-fn sync_parent_directory(path: &Path) -> Result<(), StoreError> {
+fn sync_parent_directory(_path: &Path) -> Result<(), StoreError> {
     #[cfg(unix)]
-    if let Some(parent) = path.parent() {
+    if let Some(parent) = _path.parent() {
         File::open(parent)?.sync_all()?;
     }
     Ok(())

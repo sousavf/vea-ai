@@ -1251,9 +1251,9 @@ fn normalized_absolute_path(path: &Path) -> Result<PathBuf, StoreError> {
     Ok(normalized)
 }
 
-fn sync_directory(path: &Path) -> Result<(), StoreError> {
+fn sync_directory(_path: &Path) -> Result<(), StoreError> {
     #[cfg(unix)]
-    File::open(path)?.sync_all()?;
+    File::open(_path)?.sync_all()?;
     Ok(())
 }
 
@@ -1268,11 +1268,11 @@ fn open_private_file(path: &Path) -> Result<File, StoreError> {
     Ok(options.open(path)?)
 }
 
-fn set_user_only_directory_permissions(path: &Path) -> Result<(), StoreError> {
+fn set_user_only_directory_permissions(_path: &Path) -> Result<(), StoreError> {
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
-        fs::set_permissions(path, fs::Permissions::from_mode(0o700))?;
+        fs::set_permissions(_path, fs::Permissions::from_mode(0o700))?;
     }
     Ok(())
 }
