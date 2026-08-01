@@ -14,6 +14,14 @@ fn database_path(directory: &TempDir) -> std::path::PathBuf {
     directory.path().join("vea.sqlite")
 }
 
+fn absolute_repo_path(name: &str) -> String {
+    std::env::temp_dir()
+        .join("vea-test-repositories")
+        .join(name)
+        .to_string_lossy()
+        .into_owned()
+}
+
 fn actor() -> Actor {
     Actor {
         kind: ActorKind::User,
@@ -45,7 +53,7 @@ fn side_effect_audit_context() -> SideEffectAuditContext {
         policy_decision: PolicyDecision::Approved,
         provider_id: Some("provider.test".into()),
         account_alias: Some("primary".into()),
-        affected_paths: vec!["/repos/vea/src/main.rs".into()],
+        affected_paths: vec![absolute_repo_path("vea/src/main.rs")],
         destination: Some("https://api.example.test".into()),
     }
 }
@@ -53,7 +61,7 @@ fn side_effect_audit_context() -> SideEffectAuditContext {
 fn create_project() -> StoreCommand {
     StoreCommand::Project(ProjectCommand::Create(CreateProject {
         display_name: "Vea".into(),
-        repo_root: "/repos/vea".into(),
+        repo_root: absolute_repo_path("vea"),
         repo_identity: "github.com/sousavf/vea-ai".into(),
         default_branch: "main".into(),
         provider_policy: "local-first".into(),
@@ -144,7 +152,7 @@ fn audit_records_do_not_capture_project_content() {
     let project_id = Uuid::now_v7().to_string();
     let command = StoreCommand::Project(ProjectCommand::Create(CreateProject {
         display_name: CANARY.into(),
-        repo_root: "/repos/canary".into(),
+        repo_root: absolute_repo_path("canary"),
         repo_identity: CANARY.into(),
         default_branch: "main".into(),
         provider_policy: "local-first".into(),
@@ -348,7 +356,7 @@ fn started_side_effect_is_marked_unknown_during_recovery() {
     assert_eq!(audit[0].account_alias.as_deref(), Some("primary"));
     assert_eq!(
         audit[0].affected_paths.as_deref(),
-        Some(["/repos/vea/src/main.rs".into()].as_slice())
+        Some([absolute_repo_path("vea/src/main.rs")].as_slice())
     );
     assert_eq!(
         audit[0].destination.as_deref(),
@@ -446,7 +454,7 @@ fn repo_identity_validation_matches_the_persisted_512_character_contract() {
         let project_id = Uuid::now_v7().to_string();
         let command = StoreCommand::Project(ProjectCommand::Create(CreateProject {
             display_name: format!("Project {index}"),
-            repo_root: format!("/repos/project-{index}"),
+            repo_root: absolute_repo_path(&format!("project-{index}")),
             repo_identity: repo_identity.clone(),
             default_branch: "main".into(),
             provider_policy: "local-first".into(),
@@ -716,7 +724,7 @@ fn upgrade_preserves_sql_valid_unicode_repo_identity() {
     let directory = TempDir::new().unwrap();
     let path = database_path(&directory);
     let identity = "é".repeat(300);
-    create_version_one_database_with_values(&path, "/legacy", &identity);
+    create_version_one_database_with_values(&path, &absolute_repo_path("legacy"), &identity);
     let (store, _) = Store::open(&path).unwrap();
     assert_eq!(store.list_projects().unwrap()[0].repo_identity, identity);
 }
@@ -815,7 +823,7 @@ fn rejects_newer_and_checksum_mismatched_databases() {
 }
 
 fn create_version_one_database(path: &Path) {
-    create_version_one_database_with_values(path, "/legacy", &"x".repeat(129));
+    create_version_one_database_with_values(path, &absolute_repo_path("legacy"), &"x".repeat(129));
 }
 
 fn create_version_one_database_with_root(path: &Path, repo_root: &str) {

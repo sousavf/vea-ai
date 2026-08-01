@@ -1,8 +1,8 @@
 use std::{
-    collections::BTreeMap,
+    collections::{BTreeMap, HashSet},
     fs::{self, File, OpenOptions},
     path::{Path, PathBuf},
-    sync::Mutex,
+    sync::{Mutex, OnceLock},
     time::{SystemTime, UNIX_EPOCH},
 };
 
@@ -24,10 +24,48 @@ use crate::{
     projects, side_effects,
 };
 
+static OPEN_DATABASES: OnceLock<Mutex<HashSet<PathBuf>>> = OnceLock::new();
+
+struct ProcessLockGuard {
+    database_path: PathBuf,
+}
+
 pub struct Store {
     connection: Mutex<Connection>,
     _lock: File,
+    _process_lock: ProcessLockGuard,
     database_path: PathBuf,
+}
+
+impl ProcessLockGuard {
+    fn acquire(database_path: &Path) -> Result<Self, StoreError> {
+        let file_name = database_path
+            .file_name()
+            .ok_or(StoreError::InvalidInput("database_path"))?;
+        let parent = database_path
+            .parent()
+            .ok_or(StoreError::InvalidInput("database_path"))?;
+        let database_path = fs::canonicalize(parent)?.join(file_name);
+        let mut open_databases = OPEN_DATABASES
+            .get_or_init(|| Mutex::new(HashSet::new()))
+            .lock()
+            .map_err(|_| StoreError::IntegrityFailure("process lock mutex poisoned".into()))?;
+        if !open_databases.insert(database_path.clone()) {
+            return Err(StoreError::DatabaseBusy);
+        }
+        Ok(Self { database_path })
+    }
+}
+
+impl Drop for ProcessLockGuard {
+    fn drop(&mut self) {
+        if let Ok(mut open_databases) = OPEN_DATABASES
+            .get_or_init(|| Mutex::new(HashSet::new()))
+            .lock()
+        {
+            open_databases.remove(&self.database_path);
+        }
+    }
 }
 
 impl Store {
@@ -41,6 +79,7 @@ impl Store {
         if parent_was_missing {
             set_user_only_directory_permissions(parent)?;
         }
+        let process_lock = ProcessLockGuard::acquire(&database_path)?;
         let lock_path = database_path.with_extension("lock");
         let lock = open_private_file(&lock_path)?;
         if let Err(error) = lock.try_lock_exclusive() {
@@ -65,6 +104,7 @@ impl Store {
         let store = Self {
             connection: Mutex::new(connection),
             _lock: lock,
+            _process_lock: process_lock,
             database_path,
         };
         let verification = store.verify_and_repair()?;
@@ -220,7 +260,7 @@ impl Store {
         let result = (|| {
             let connection = self.lock_connection()?;
             backup_to_path(&connection, &temporary)?;
-            File::open(&temporary)?.sync_all()?;
+            sync_file(&temporary)?;
             fs::hard_link(&temporary, destination)?;
             set_user_only_permissions(destination)?;
             sync_directory(parent)?;
@@ -247,6 +287,7 @@ impl Store {
         if !parent.is_dir() {
             return Err(StoreError::InvalidInput("database parent"));
         }
+        let _process_lock = ProcessLockGuard::acquire(database_path)?;
         let lock_path = database_path.with_extension("lock");
         let lock = open_private_file(&lock_path)?;
         if let Err(error) = lock.try_lock_exclusive() {
@@ -285,7 +326,7 @@ impl Store {
             let _ = fs::remove_file(&temporary);
             return Err(error);
         }
-        File::open(&temporary)?.sync_all()?;
+        sync_file(&temporary)?;
 
         let rollback = parent.join(format!(".{file_name}.{restore_id}.restore.old"));
         let wal = sqlite_auxiliary_path(database_path, "-wal");
@@ -1249,6 +1290,15 @@ fn normalized_absolute_path(path: &Path) -> Result<PathBuf, StoreError> {
         }
     }
     Ok(normalized)
+}
+
+fn sync_file(path: &Path) -> Result<(), StoreError> {
+    OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(path)?
+        .sync_all()?;
+    Ok(())
 }
 
 fn sync_directory(_path: &Path) -> Result<(), StoreError> {

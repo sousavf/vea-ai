@@ -313,7 +313,7 @@ fn backup_database(
     quick_check(&destination)?;
     drop(destination);
     set_user_only_permissions(&backup_path)?;
-    File::open(&backup_path)?.sync_all()?;
+    sync_file(&backup_path)?;
     sync_parent_directory(&backup_path)?;
     Ok(backup_path)
 }
@@ -370,6 +370,15 @@ fn create_private_file(path: &Path) -> Result<(), StoreError> {
         options.mode(0o600);
     }
     options.open(path)?;
+    Ok(())
+}
+
+fn sync_file(path: &Path) -> Result<(), StoreError> {
+    OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open(path)?
+        .sync_all()?;
     Ok(())
 }
 
