@@ -1,0 +1,22 @@
+[package]
+name = "vea-store"
+version = "0.1.0"
+description = "Durable SQLite event and projection store for Vea"
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+fs2.workspace = true
+hex.workspace = true
+rusqlite.workspace = true
+same-file.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tempfile = "3.27.0"

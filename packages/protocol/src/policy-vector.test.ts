@@ -7,7 +7,8 @@ function canonicalJson(value: unknown): string {
     return JSON.stringify(value);
   }
   if (typeof value === "number") {
-    if (!Number.isSafeInteger(value)) throw new Error("canonical policy values require safe integers");
+    if (!Number.isSafeInteger(value))
+      throw new Error("canonical policy values require safe integers");
     return String(value);
   }
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;

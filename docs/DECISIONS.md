@@ -35,3 +35,9 @@
 **Decision:** Vea is licensed under MIT.
 
 **Reason:** The project prioritizes simple, broad reuse and contribution compatibility.
+
+## ADR-007 — Rust-owned event store and disposable projections
+
+**Decision:** The Rust host is the sole SQLite authority. Typed commands atomically append immutable domain/audit records and update materialized projections; startup replays the event stream to verify or rebuild those projections.
+
+**Reason:** Commit-before-acknowledgement, exact-retry receipts, optimistic revisions, and fail-closed replay keep durable state out of the renderer and sidecar trust boundaries. External side effects use an explicit phase ledger so recovery marks ambiguous outcomes instead of repeating writes.

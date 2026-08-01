@@ -11,18 +11,14 @@
       "project_id": "project-1",
       "run_id": "run-1",
       "worktree_id": "worktree-1",
-      "paths": [
-        "src/policy.rs"
-      ]
+      "paths": ["src/policy.rs"]
     },
     "operation": {
       "kind": "apply_patch",
       "worktree_id": "worktree-1",
       "patch_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "patch_bytes": 128,
-      "affected_paths": [
-        "src/policy.rs"
-      ]
+      "affected_paths": ["src/policy.rs"]
     },
     "provenance": [
       {
@@ -49,9 +45,7 @@
         "project_id": "project-1",
         "run_id": "run-1",
         "worktree_id": "worktree-1",
-        "paths": [
-          "src/policy.rs"
-        ]
+        "paths": ["src/policy.rs"]
       }
     ],
     "rules": {

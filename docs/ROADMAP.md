@@ -10,7 +10,7 @@ The implementation sequence is security-first. Extension breadth never weakens t
 - [x] Sidecar handshake foundation and tests
 - [x] Rust-host action/capability schemas and canonical digest
 - [ ] Target-specific sidecar packaging spike
-- [ ] SQLite event store migration 0001
+- [x] SQLite event store migrations and durable project aggregate
 
 ## M1 — Multi-project local control plane
 

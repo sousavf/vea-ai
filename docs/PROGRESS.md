@@ -1,6 +1,6 @@
 # Implementation progress
 
-Updated: 2026-07-31
+Updated: 2026-08-01
 
 ## Completed locally
 
@@ -16,6 +16,8 @@ Updated: 2026-07-31
 - Restricted the Tauri renderer capability list to no core permissions; only the registered app metadata command is currently callable.
 - Added cross-platform CI definitions and supply-chain lockfiles.
 - Added the Rust `vea-policy` authorization core with independent capability grants, typed policy rules, bounded canonical actions, action/policy/state digests, short-lived approvals, and shared Rust/TypeScript golden vectors.
+- Added the Rust `vea-store` durable SQLite core with checksummed transactional migrations, online pre-upgrade backups, exact-retry command receipts, optimistic aggregate revisions, append-only domain/audit ledgers, replayable project and side-effect projections, and fail-closed integrity checks.
+- Added crash-safe side-effect lifecycle persistence; interrupted `started` actions become `unknown` on startup and are never replayed automatically.
 
 ## Validation
 
@@ -25,12 +27,12 @@ Updated: 2026-07-31
 - Rust format, Clippy with warnings denied, and tests: passing.
 - Tauri native no-bundle build: validated locally on macOS during review.
 - JSON files and Prettier formatting: passing.
-- Initial M0 commit is pushed to `origin/main`; the working tree is clean.
+- Foundation, canonical-policy, and durable-store milestones are pushed to `origin/main`; the final store review found no landing blockers.
 
 ## Not implemented
 
-- SQLite event store and migrations.
-- Host/UI/store wiring for canonical actions and approvals, plus audit persistence.
+- Durable graph, task, attempt, approval-consumption, and worktree-lease aggregates.
+- Host/UI/store wiring for canonical actions, approvals, and typed renderer queries.
 - OS keychain/OAuth broker.
 - Secure filesystem/Git/worktree/process brokers.
 - Sidecar packaging and supervision from Rust.
@@ -40,4 +42,4 @@ Updated: 2026-07-31
 
 ## Publication status
 
-Local step 3 is complete and the final review found no blocker in the scoped M0 scaffold. The user approved step 4; the initial foundation is committed and pushed to the public GitHub repository.
+The M0 foundation, canonical policy core, and durable event store are published. Provider execution and privileged broker wiring remain intentionally disabled.

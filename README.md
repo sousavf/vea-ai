@@ -21,6 +21,8 @@ Vea coordinates multiple projects and parallel agents while selecting the provid
 ```text
 apps/desktop        Tauri v2 + React desktop UI
 apps/agent-service  TypeScript scheduler/runtime sidecar foundation
+crates/vea-policy   Canonical Rust action authorization core
+crates/vea-store    Durable Rust SQLite event store and projections
 packages/domain     Durable task and run contracts
 packages/config     Versioned, validated user configuration
 packages/scheduler  Deterministic cross-project scheduler
