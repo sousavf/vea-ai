@@ -1,8 +1,11 @@
 use std::{
-    fs::{self, File, OpenOptions},
+    fs::{self, OpenOptions},
     path::{Path, PathBuf},
     time::Duration,
 };
+
+#[cfg(unix)]
+use std::fs::File;
 
 use rusqlite::{Connection, TransactionBehavior, backup::Backup, config::DbConfig, params};
 use sha2::{Digest, Sha256};
